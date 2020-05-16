@@ -20,7 +20,7 @@ public class FileUploadController {
 	FileUploadService fileUploadService;
 
 	@PostMapping(value = "/uploadfile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public boolean uploadCSVFile(@RequestParam("file") MultipartFile file) throws IOException {
+	public String uploadCSVFile(@RequestParam("file") MultipartFile file) throws IOException {
 		return fileUploadService.uploadCSVFile(file);
 	}
 }
