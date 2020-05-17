@@ -1,4 +1,4 @@
-package com.example.fileUploadDownloadDemo.service;
+package com.example.fileUploadDownloadDemo.repository;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 

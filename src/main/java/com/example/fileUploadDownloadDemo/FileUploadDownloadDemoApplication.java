@@ -4,9 +4,13 @@ import java.util.concurrent.Executor;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.AsyncConfigurer;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.util.concurrent.ListenableFutureCallback;
+
+import com.example.fileUploadDownloadDemo.config.MyListenableFutureCallback;
 
 @SpringBootApplication
 @EnableAsync
@@ -18,13 +22,18 @@ public class FileUploadDownloadDemoApplication implements AsyncConfigurer {
 	
 	@Override
     public Executor getAsyncExecutor() {
-        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+		ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(2);
-        executor.setMaxPoolSize(2);
-        executor.setQueueCapacity(3);
+        executor.setMaxPoolSize(5);
+        executor.setQueueCapacity(10);
         executor.setThreadNamePrefix("AsyncExecutor-");
         executor.initialize();
         return executor;
     }
-
+	
+	@Bean
+    ListenableFutureCallback<String> taskListenableCallback () {
+        return new MyListenableFutureCallback();
+    }
+	
 }

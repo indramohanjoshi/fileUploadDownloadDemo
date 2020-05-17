@@ -11,17 +11,22 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.fileUploadDownloadDemo.service.FileUploadService;
+import com.example.fileUploadDownloadDemo.service.AsyncFileUploadService;
 
 @RestController
-@RequestMapping("/api")
-public class FileUploadController {
+@RequestMapping("/asyncapi")
+public class AsyncFileUploadController {
 
 	@Autowired
-	FileUploadService fileUploadService;
+	private FileUploadService fileUploadService;
+	
+	@Autowired
+	private AsyncFileUploadService asyncFileUploadService;
 
 	@PostMapping(value = "/uploadfile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public String uploadCSVFile(@RequestParam("file") MultipartFile file) throws IOException {
-		fileUploadService.uploadCSVFileRequest(file);
-		return fileUploadService.uploadCSVFile(file, true);
+	public String uploadCSVFileAsync(@RequestParam("file") MultipartFile file) throws IOException {
+		String requestStatus = fileUploadService.uploadCSVFileRequest(file);
+		asyncFileUploadService.uploadCSVFileAsync(file);
+		return requestStatus;
 	}
 }
