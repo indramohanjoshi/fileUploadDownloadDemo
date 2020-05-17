@@ -69,6 +69,7 @@ public class FileUploadService {
 			throw new IncorrectFileException(file.getOriginalFilename(), "can not upload empty file.");
 		}
 
+		LOG.info("update file :: {} status to Processing", file.getOriginalFilename());
 		updateFileStatus(file.getOriginalFilename(), PROCESSING, "File is being proces..!");
 
 		try (InputStreamReader reader = new InputStreamReader(file.getInputStream(), "UTF-8");
@@ -87,11 +88,13 @@ public class FileUploadService {
 		} catch (Exception ex) {
 			LOG.error("some error occured while processing!", ex);
 			if (isSyncMode) {
+				LOG.error("update file :: {} status to Failed", file.getOriginalFilename());
 				updateFileStatus(file.getOriginalFilename(), FAILED, ex.getMessage());
 			}
 			throw new IncorrectFileException(file.getOriginalFilename(), "some error occured while processing!");
 		}
 		if (isSyncMode) {
+			LOG.info("update file :: {} status to Success", file.getOriginalFilename());
 			updateFileStatus(file.getOriginalFilename(), SUCCESS, "File processed Successfully!");
 		}
 		return "Request completed successfully!";
@@ -111,7 +114,6 @@ public class FileUploadService {
 	}
 
 	public void updateFileStatus(String fileName, String status, String description) {
-		LOG.info("update file :: {} status :: {}", fileName, status);
 		UploadFileRequest fileRequest = uploadFileRequestRepository.findByFileName(fileName);
 		fileRequest.setFileStatus(status);
 		fileRequest.setFileStatusDescription(description);

@@ -6,14 +6,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.AsyncConfigurer;
-import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 
 import com.example.fileUploadDownloadDemo.config.MyListenableFutureCallback;
 
 @SpringBootApplication
-@EnableAsync
 public class FileUploadDownloadDemoApplication implements AsyncConfigurer {
 
 	public static void main(String[] args) {
@@ -32,7 +30,7 @@ public class FileUploadDownloadDemoApplication implements AsyncConfigurer {
     }
 	
 	@Bean
-    ListenableFutureCallback<String> taskListenableCallback () {
+    public ListenableFutureCallback<String> taskListenableCallback () {
         return new MyListenableFutureCallback();
     }
 	

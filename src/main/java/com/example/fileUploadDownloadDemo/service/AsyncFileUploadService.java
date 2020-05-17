@@ -35,10 +35,17 @@ public class AsyncFileUploadService {
 		ListenableFuture<String> listenableFuture = executor.submitListenable(getTask(file));
 		listenableFuture.addCallback(threadListenableCallback);
 		try {
+			//if many request submitted in parallel, executer queue capacity is 
+			//configured to 10 and thread pool i.e. task size is configured to 
+			// 5 if reached, executer thread (main thread) might commit response
+			// before task thread available in pool, and hence request data 
+			// in main thread will be garbage collected and processing failed
+			// saying that can not insert empty file.
 			LOG.info(
 					"Manual delay of :: {} mili second, so that main request should not commit respond before async task start.", manualProcessingDelay);
 			Thread.sleep(manualProcessingDelay);
 		} catch (InterruptedException e) {
+			System.out.println("inside catch");
 			LOG.error("Manual delay of :: {} mili seconds completed.", manualProcessingDelay);
 		}
 	}

@@ -23,14 +23,14 @@ public class MyListenableFutureCallback implements ListenableFutureCallback<Stri
 		LOG.error("error occured ", ex);
 		if (ex instanceof IncorrectFileException) {
 			IncorrectFileException exception = (IncorrectFileException) ex;
-			LOG.error("updating file :: {} status to Failed. ", exception.getFileName());
+			LOG.error("update file :: {} status to Failed. ", exception.getFileName());
 			fileUploadService.updateFileStatus(exception.getFileName(), FAILED, ex.getMessage());
 		}
 	}
 
 	@Override
 	public void onSuccess(String fileName) {
-		LOG.error("updating file :: {} status to Success. ", fileName);
+		LOG.info("update file :: {} status to Success. ", fileName);
 		fileUploadService.updateFileStatus(fileName, SUCCESS, "File processed successfully!");
 	}
 }
